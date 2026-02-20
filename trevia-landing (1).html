@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trevia – Gestión Residencial Digital | Tu condominio, sin complicaciones</title>
+  <meta name="description" content="Trevia transforma la administración de condominios en una experiencia digital, transparente y eficiente vía WhatsApp. Sin apps, sin contraseñas, sin complicaciones." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:   #0D2448;
+      --petrol: #1A4A7A;
+      --blue:   #2563A8;
+      --green:  #2BB890;
+      --green2: #1E9E7A;
+      --gold:   #E8A833;
+      --white:  #FFFFFF;
+      --off:    #F7F9FC;
+      --gray:   #6B7A8D;
+      --lgray:  #E2E8F0;
+      --text:   #1A2332;
+      --ff-display: 'Cormorant Garamond', Georgia, serif;
+      --ff-body:    'Montserrat', sans-serif;
+      --radius: 16px;
+      --shadow: 0 8px 40px rgba(13,36,72,.10);
+      --shadow-lg: 0 20px 80px rgba(13,36,72,.16);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: var(--ff-body); color: var(--text); background: var(--white); overflow-x: hidden; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 100px 0; }
+    .section--dark { background: var(--navy); color: var(--white); }
+    .section--off  { background: var(--off); }
+
+    .eyebrow { display: inline-block; font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+    h1,h2,h3,h4 { font-family: var(--ff-display); line-height: 1.15; }
+    h1 { font-size: clamp(2.6rem, 5.5vw, 4.8rem); font-weight: 600; }
+    h2 { font-size: clamp(1.9rem, 3.8vw, 3rem); font-weight: 600; }
+    h3 { font-size: 1.4rem; font-weight: 600; }
+    .lead { font-size: 1.05rem; line-height: 1.8; color: var(--gray); max-width: 620px; }
+    .lead--light { color: rgba(255,255,255,.72); }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 50px; font-family: var(--ff-body); font-size: .88rem; font-weight: 600; cursor: pointer; transition: all .25s ease; border: none; outline: none; letter-spacing: .02em; }
+    .btn-primary { background: var(--green); color: var(--white); box-shadow: 0 4px 24px rgba(43,184,144,.35); }
+    .btn-primary:hover { background: var(--green2); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,.4); }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,.08); }
+    .btn-navy { background: var(--navy); color: var(--white); }
+    .btn-navy:hover { background: var(--petrol); transform: translateY(-2px); }
+
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 50px; font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; background: var(--green); color: var(--white); }
+    .badge--gold { background: var(--gold); }
+    .divider { width: 60px; height: 3px; background: var(--green); border-radius: 2px; margin: 20px 0 32px; }
+    .icon-circle { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(43,184,144,.12); color: var(--green); font-size: 1.4rem; flex-shrink: 0; margin-bottom: 20px; }
+    .icon-circle--gold { background: rgba(232,168,51,.12); color: var(--gold); }
+    .icon-circle--blue { background: rgba(37,99,168,.12); color: var(--blue); }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 28px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px,1fr)); gap: 24px; }
+
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+
+    /* NAVBAR */
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 0 24px; transition: background .4s ease, box-shadow .4s ease; }
+    .navbar.scrolled { background: rgba(13,36,72,.97); box-shadow: 0 4px 30px rgba(0,0,0,.2); backdrop-filter: blur(12px); }
+    .navbar__inner { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .navbar__logo { display: flex; align-items: center; gap: 10px; }
+    .navbar__logo-mark { width: 40px; height: 40px; }
+    .navbar__logo-text { font-family: var(--ff-display); font-size: 1.55rem; font-weight: 700; color: var(--white); }
+    .navbar__logo-sub { font-size: .62rem; font-weight: 400; opacity: .6; letter-spacing: .08em; text-transform: uppercase; display: block; margin-top: -4px; }
+    .navbar__links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .navbar__links a { color: rgba(255,255,255,.8); font-size: .82rem; font-weight: 500; transition: color .2s; }
+    .navbar__links a:hover { color: var(--green); }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+    .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--white); transition: all .3s; border-radius: 2px; }
+    .mobile-menu { display: none; position: fixed; top: 72px; left: 0; right: 0; background: var(--navy); padding: 24px; z-index: 999; flex-direction: column; gap: 16px; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: rgba(255,255,255,.8); font-size: 1rem; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+
+    /* HERO */
+    .hero { min-height: 100vh; background: linear-gradient(135deg, var(--navy) 0%, #0B3060 50%, #0F3D6E 100%); display: flex; align-items: center; position: relative; overflow: hidden; padding-top: 72px; }
+    .hero::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(43,184,144,.12) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 20% 80%, rgba(37,99,168,.2) 0%, transparent 60%); }
+    .hero__grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 60px; position: relative; z-index: 1; }
+    .hero__eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+    .hero__pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(43,184,144,.5)} 70%{box-shadow:0 0 0 10px rgba(43,184,144,0)} 100%{box-shadow:0 0 0 0 rgba(43,184,144,0)} }
+    .hero__eyebrow span { color: var(--green); font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+    .hero h1 { color: var(--white); margin-bottom: 24px; }
+    .hero h1 em { font-style: normal; color: var(--green); }
+    .hero__subtitle { color: rgba(255,255,255,.75); font-size: 1rem; line-height: 1.8; margin-bottom: 40px; max-width: 500px; }
+    .hero__actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-bottom: 48px; }
+
+    /* Stats row — siempre horizontal con separadores */
+    .hero__stats { display: flex; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.12); }
+    .hero__stat { flex: 1; }
+    .hero__stat + .hero__stat { border-left: 1px solid rgba(255,255,255,.12); padding-left: 28px; }
+    .hero__stat-num { font-family: var(--ff-display); font-size: 2rem; font-weight: 700; color: var(--white); line-height: 1; }
+    .hero__stat-num span { color: var(--green); }
+    .hero__stat-label { font-size: .7rem; color: rgba(255,255,255,.5); margin-top: 5px; letter-spacing: .04em; }
+
+    /* Phone mock */
+    .hero__visual { position: relative; }
+    .hero__phone-wrap { position: relative; max-width: 340px; margin: 0 auto; padding: 20px; }
+    .hero__phone-mock { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.13); border-radius: 24px; padding: 22px; backdrop-filter: blur(10px); }
+    .hero__phone-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,.1); }
+    .hero__phone-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--green), var(--blue)); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .hero__phone-name { color: var(--white); font-size: .85rem; font-weight: 600; }
+    .hero__phone-status { font-size: .68rem; color: var(--green); }
+    .hero__msg { margin-bottom: 10px; }
+    .hero__bubble { display: inline-block; padding: 9px 13px; border-radius: 12px; font-size: .78rem; line-height: 1.55; max-width: 88%; }
+    .hero__bubble--in { background: rgba(255,255,255,.13); color: rgba(255,255,255,.9); border-radius: 4px 12px 12px 12px; }
+    .hero__bubble--out { background: var(--green); color: var(--white); border-radius: 12px 4px 12px 12px; margin-left: auto; }
+    .hero__msg--out { display: flex; justify-content: flex-end; }
+    .msg-time { display: block; font-size: .62rem; color: rgba(255,255,255,.4); margin-top: 3px; text-align: right; }
+    .hero__typing { display: flex; align-items: center; gap: 5px; padding: 9px 13px; background: rgba(255,255,255,.09); border-radius: 12px; width: fit-content; }
+    .hero__typing span { width: 5px; height: 5px; background: rgba(255,255,255,.5); border-radius: 50%; animation: typing .9s infinite; }
+    .hero__typing span:nth-child(2) { animation-delay: .2s; }
+    .hero__typing span:nth-child(3) { animation-delay: .4s; }
+    @keyframes typing { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+
+    /* Floating cards — dentro del padding del wrapper para no salirse */
+    .hero__float { position: absolute; background: var(--white); border-radius: 12px; padding: 10px 14px; box-shadow: 0 6px 24px rgba(0,0,0,.25); display: flex; align-items: center; gap: 9px; animation: float 4s ease-in-out infinite; z-index: 10; }
+    .hero__float--1 { top: 0; right: 0; animation-delay: 0s; }
+    .hero__float--2 { bottom: 0; left: 0; animation-delay: 2s; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+    .hero__float-icon { font-size: 1.2rem; }
+    .hero__float-title { font-weight: 700; color: var(--navy); font-size: .75rem; }
+    .hero__float-sub { color: var(--gray); font-size: .7rem; }
+
+    /* QUEES */
+    .quees__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .quees__pillar-list { display: flex; flex-direction: column; gap: 16px; margin-top: 32px; }
+    .quees__pillar { display: flex; gap: 16px; align-items: flex-start; padding: 18px; border-radius: 12px; border-left: 3px solid transparent; transition: all .3s; }
+    .quees__pillar:hover { background: var(--off); border-left-color: var(--green); }
+    .quees__pillar-num { font-family: var(--ff-display); font-size: 2.2rem; font-weight: 700; color: var(--lgray); line-height: 1; flex-shrink: 0; width: 44px; }
+    .quees__pillar-body h4 { margin-bottom: 5px; }
+    .quees__pillar-body p { color: var(--gray); font-size: .85rem; line-height: 1.7; }
+    .quees__visual { background: linear-gradient(135deg, var(--navy), var(--petrol)); border-radius: 24px; padding: 44px 36px; text-align: center; color: var(--white); position: relative; overflow: hidden; }
+    .quees__visual::before { content:''; position:absolute; top:-40px; right:-40px; width:200px; height:200px; border-radius:50%; background:rgba(43,184,144,.1); }
+    .quees__logo-big { font-family: var(--ff-display); font-size: 3.6rem; font-weight: 700; margin-bottom: 12px; }
+    .quees__logo-big span { color: var(--green); }
+    .quees__tagline { font-size: 1rem; opacity: .7; margin-bottom: 28px; }
+    .quees__pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .quees__pill { padding: 7px 14px; border-radius: 50px; background: rgba(255,255,255,.1); font-size: .75rem; font-weight: 500; border: 1px solid rgba(255,255,255,.15); }
+
+    /* STEPS */
+    .steps__header { text-align: center; margin-bottom: 70px; }
+    .steps__track { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 0; position: relative; }
+    .steps__track::before { content:''; position:absolute; top:40px; left:10%; right:10%; height:2px; background:repeating-linear-gradient(90deg,var(--green) 0,var(--green) 10px,transparent 10px,transparent 20px); z-index:0; }
+    .step { text-align: center; padding: 0 16px; position: relative; z-index: 1; }
+    .step__number { width: 80px; height: 80px; border-radius: 50%; background: var(--white); border: 3px solid var(--green); display: flex; align-items: center; justify-content: center; margin: 0 auto 22px; font-size: 1.5rem; box-shadow: 0 0 0 6px rgba(43,184,144,.1); }
+    .step h4 { margin-bottom: 8px; }
+    .step p { font-size: .83rem; color: var(--gray); line-height: 1.7; }
+
+    /* SERVICES */
+    .service-card { padding: 32px 26px; border-radius: var(--radius); background: var(--white); box-shadow: var(--shadow); transition: all .3s; border: 1px solid var(--lgray); position: relative; overflow: hidden; }
+    .service-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--green),var(--blue)); transform:scaleX(0); transform-origin:left; transition:transform .3s ease; }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .service-card h3 { margin-bottom: 10px; font-size: 1.1rem; }
+    .service-card p { font-size: .83rem; color: var(--gray); line-height: 1.7; }
+    .service-card ul { list-style: none; margin-top: 14px; }
+    .service-card ul li { font-size: .78rem; color: var(--gray); padding: 4px 0; display: flex; align-items: center; gap: 7px; }
+    .service-card ul li::before { content:'✓'; color: var(--green); font-weight: 700; }
+
+    /* DOMUS */
+    .domus__inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .domus__badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+    .domus__features { display: flex; flex-direction: column; gap: 18px; margin-top: 32px; }
+    .domus__feat { display: flex; gap: 14px; align-items: flex-start; }
+    .domus__feat-icon { width: 42px; height: 42px; border-radius: 10px; background: rgba(43,184,144,.12); color: var(--green); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .domus__feat h4 { margin-bottom: 3px; font-size: .95rem; }
+    .domus__feat p { font-size: .82rem; color: rgba(255,255,255,.6); line-height: 1.65; }
+    .domus__visual { background: linear-gradient(135deg, #0A1A30, #0F2F58); border-radius: 24px; padding: 32px; }
+    .domus__metric { background: rgba(255,255,255,.06); border-radius: 12px; padding: 18px; border: 1px solid rgba(255,255,255,.08); margin-bottom: 14px; }
+    .domus__metric:last-child { margin-bottom: 0; }
+    .domus__metric-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: rgba(255,255,255,.6); font-size: .75rem; }
+    .domus__bar { height: 5px; border-radius: 3px; background: rgba(255,255,255,.1); overflow: hidden; }
+    .domus__bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--green), var(--blue)); }
+    .domus__metric-val { font-family: var(--ff-display); font-size: 1.7rem; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+    .domus__metric-val span { color: var(--green); }
+
+    /* BENEFICIOS */
+    .benefits__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 18px; }
+    .benefit-item { display: flex; gap: 18px; align-items: flex-start; padding: 26px; background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--lgray); transition: all .3s; }
+    .benefit-item:hover { transform: translateX(5px); border-color: var(--green); }
+    .benefit-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .benefit-item h4 { margin-bottom: 5px; }
+    .benefit-item p { font-size: .83rem; color: var(--gray); line-height: 1.7; }
+
+    /* VALORES */
+    .valor-card { text-align: center; padding: 36px 20px; border-radius: var(--radius); background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); transition: all .3s; }
+    .valor-card:hover { background: rgba(255,255,255,.10); border-color: var(--green); transform: translateY(-4px); }
+    .valor-card__icon { font-size: 2rem; margin-bottom: 14px; display: block; }
+    .valor-card h4 { color: var(--white); margin-bottom: 7px; font-size: 1.05rem; }
+    .valor-card p { font-size: .8rem; color: rgba(255,255,255,.6); line-height: 1.7; }
+
+    /* PLANES */
+    .plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px,1fr)); gap: 24px; align-items: start; }
+    .plan { border-radius: var(--radius); padding: 36px 28px; border: 2px solid var(--lgray); background: var(--white); position: relative; transition: all .3s; }
+    .plan:hover { border-color: var(--green); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .plan--featured { border-color: var(--green); background: var(--navy); color: var(--white); transform: scale(1.03); }
+    .plan--featured:hover { transform: scale(1.03) translateY(-4px); }
+    .plan__badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); }
+    .plan__name { font-size: .85rem; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--gray); margin-bottom: 10px; }
+    .plan--featured .plan__name { color: rgba(255,255,255,.6); }
+    .plan__price { font-family: var(--ff-display); font-size: 2.6rem; font-weight: 700; color: var(--navy); line-height: 1; margin-bottom: 4px; }
+    .plan--featured .plan__price { color: var(--white); }
+    .plan__period { font-size: .8rem; color: var(--gray); margin-bottom: 20px; }
+    .plan--featured .plan__period { color: rgba(255,255,255,.5); }
+    .plan__desc { font-size: .83rem; color: var(--gray); margin-bottom: 24px; line-height: 1.7; }
+    .plan--featured .plan__desc { color: rgba(255,255,255,.7); }
+    .plan__features { list-style: none; margin-bottom: 28px; }
+    .plan__features li { display: flex; gap: 9px; align-items: flex-start; font-size: .82rem; padding: 7px 0; border-bottom: 1px solid var(--lgray); }
+    .plan--featured .plan__features li { border-color: rgba(255,255,255,.08); color: rgba(255,255,255,.85); }
+    .plan__features li span { color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .plan__note { font-size: .74rem; color: var(--gray); margin-top: 12px; }
+    .plan--featured .plan__note { color: rgba(255,255,255,.4); }
+
+    /* CASOS */
+    .caso { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; border: 1px solid var(--lgray); transition: all .3s; }
+    .caso:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .caso__header { padding: 22px; background: linear-gradient(135deg, var(--navy), var(--petrol)); color: var(--white); display: flex; gap: 12px; align-items: center; }
+    .caso__avatar { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.15); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .caso__user-name { font-weight: 600; font-size: .9rem; }
+    .caso__user-role { font-size: .72rem; opacity: .65; }
+    .caso__body { padding: 22px; }
+    .caso__chat { display: flex; flex-direction: column; gap: 9px; }
+    .caso__bubble { padding: 9px 13px; border-radius: 10px; font-size: .78rem; line-height: 1.6; max-width: 88%; }
+    .caso__bubble--user { background: var(--off); color: var(--text); border-radius: 4px 10px 10px 10px; align-self: flex-start; }
+    .caso__bubble--bot { background: var(--green); color: var(--white); border-radius: 10px 4px 10px 10px; align-self: flex-end; }
+    .caso__result { margin-top: 18px; padding: 12px; background: var(--off); border-radius: 10px; border-left: 3px solid var(--green); }
+    .caso__result-label { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--green); margin-bottom: 3px; }
+    .caso__result p { font-size: .78rem; color: var(--gray); }
+
+    /* FAQ */
+    .faq__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 900px; margin: 0 auto; }
+    .faq-item { border: 1px solid var(--lgray); border-radius: 14px; overflow: hidden; background: var(--white); }
+    .faq-item:hover { box-shadow: var(--shadow); }
+    .faq__q { padding: 18px 22px; font-size: .88rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; user-select: none; }
+    .faq__toggle { width: 26px; height: 26px; border-radius: 50%; background: var(--off); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem; transition: transform .3s, background .2s; color: var(--navy); }
+    .faq-item.open .faq__toggle { background: var(--green); color: var(--white); transform: rotate(45deg); }
+    .faq__a { padding: 0 22px; max-height: 0; overflow: hidden; transition: max-height .4s ease, padding .3s; font-size: .83rem; color: var(--gray); line-height: 1.8; }
+    .faq-item.open .faq__a { max-height: 200px; padding: 0 22px 18px; }
+
+    /* CONTACTO */
+    .contacto { background: linear-gradient(135deg, var(--navy), #0B3060); color: var(--white); padding: 100px 0; position: relative; overflow: hidden; text-align: center; }
+    .contacto::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 50% 50%, rgba(43,184,144,.08) 0%, transparent 70%); }
+    .contacto__inner { position: relative; z-index: 1; }
+    .contacto h2 { color: var(--white); margin-bottom: 16px; }
+    .contacto p { color: rgba(255,255,255,.7); font-size: 1.05rem; margin-bottom: 36px; max-width: 540px; margin-left: auto; margin-right: auto; line-height: 1.75; }
+    .contacto__actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-bottom: 44px; }
+    .contacto__info { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; padding-top: 36px; border-top: 1px solid rgba(255,255,255,.1); }
+    .contacto__info-item { text-align: center; }
+    .contacto__info-item .icon { font-size: 1.3rem; margin-bottom: 5px; }
+    .contacto__info-item .label { font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.4); }
+    .contacto__info-item .val { font-size: .9rem; color: rgba(255,255,255,.85); margin-top: 2px; }
+
+    /* FOOTER */
+    footer { background: #06111F; color: rgba(255,255,255,.6); padding: 60px 0 28px; }
+    .footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 44px; margin-bottom: 44px; }
+    .footer__brand-name { font-family: var(--ff-display); font-size: 1.7rem; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+    .footer__brand-name span { color: var(--green); }
+    .footer__brand-desc { font-size: .8rem; line-height: 1.8; margin-bottom: 20px; }
+    .footer__social { display: flex; gap: 8px; }
+    .footer__social a { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; font-size: .8rem; transition: all .2s; color: rgba(255,255,255,.7); }
+    .footer__social a:hover { background: var(--green); border-color: var(--green); color: var(--white); }
+    .footer__col-title { color: var(--white); font-size: .78rem; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 18px; }
+    .footer__links { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .footer__links a { font-size: .8rem; transition: color .2s; }
+    .footer__links a:hover { color: var(--green); }
+    .footer__bottom { padding-top: 24px; border-top: 1px solid rgba(255,255,255,.07); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer__bottom p { font-size: .75rem; }
+    .footer__bottom-links { display: flex; gap: 20px; }
+    .footer__bottom-links a { font-size: .75rem; transition: color .2s; }
+    .footer__bottom-links a:hover { color: var(--green); }
+    .footer__domus { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.05); padding: 7px 13px; border-radius: 50px; font-size: .74rem; margin-top: 14px; border: 1px solid rgba(255,255,255,.08); }
+    .footer__domus span { color: var(--green); font-weight: 600; }
+
+    /* WA FLOAT */
+    .wa-float { position: fixed; bottom: 28px; right: 28px; z-index: 999; }
+    .wa-float__btn { width: 60px; height: 60px; border-radius: 50%; background: #25D366; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 24px rgba(37,211,102,.4); transition: transform .25s ease; animation: wa-pulse 3s infinite 2s; }
+    @keyframes wa-pulse { 0%,100%{box-shadow:0 4px 24px rgba(37,211,102,.4)} 50%{box-shadow:0 4px 40px rgba(37,211,102,.7)} }
+    .wa-float__btn:hover { transform: scale(1.1); }
+    .wa-float__btn svg { width: 30px; height: 30px; fill: white; }
+    .wa-float__tooltip { position: absolute; bottom: 70px; right: 0; background: var(--navy); color: var(--white); padding: 9px 14px; border-radius: 12px 12px 0 12px; font-size: .78rem; white-space: nowrap; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transform: translateY(6px); transition: all .25s; }
+    .wa-float:hover .wa-float__tooltip { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      .hero__grid, .quees__grid, .domus__inner { grid-template-columns: 1fr; }
+      .hero__visual { display: none; }
+      .footer__grid { grid-template-columns: 1fr 1fr; }
+      .faq__grid { grid-template-columns: 1fr; }
+      .navbar__links { display: none; }
+      .navbar__cta .btn { display: none; }
+      .nav-hamburger { display: flex; }
+      .steps__track::before { display: none; }
+    }
+    @media (max-width: 600px) {
+      .footer__grid, .plans-grid { grid-template-columns: 1fr; }
+      .plan--featured { transform: none; }
+      .contacto__info { gap: 20px; }
+      .hero__stat + .hero__stat { padding-left: 16px; }
+    }
+    ::selection { background: var(--green); color: var(--white); }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar" role="navigation" aria-label="Navegación principal">
+  <div class="navbar__inner">
+    <a href="#" class="navbar__logo" aria-label="Trevia inicio">
+      <svg class="navbar__logo-mark" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="38" cy="75" rx="18" ry="40" transform="rotate(-30 38 75)" fill="#2BB890" opacity=".85"/>
+        <ellipse cx="55" cy="72" rx="18" ry="42" transform="rotate(-18 55 72)" fill="#2563A8" opacity=".9"/>
+        <ellipse cx="72" cy="68" rx="18" ry="44" transform="rotate(-5 72 68)" fill="#0D2448"/>
+        <circle cx="65" cy="22" r="10" fill="#E8A833"/>
+      </svg>
+      <div>
+        <span class="navbar__logo-text">Trevia</span>
+        <span class="navbar__logo-sub">Gestión Residencial Digital</span>
+      </div>
+    </a>
+    <ul class="navbar__links">
+      <li><a href="#quees">¿Qué es?</a></li>
+      <li><a href="#como">Cómo funciona</a></li>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#planes">Planes</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="navbar__cta">
+      <a href="https://wa.me/51999999999?text=Hola%20Trevia" target="_blank" rel="noopener" class="btn btn-primary">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Contáctanos
+      </a>
+      <button class="nav-hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#quees" onclick="closeMobileMenu()">¿Qué es Trevia?</a>
+  <a href="#como" onclick="closeMobileMenu()">Cómo funciona</a>
+  <a href="#servicios" onclick="closeMobileMenu()">Servicios</a>
+  <a href="#domus" onclick="closeMobileMenu()">Tecnología IA</a>
+  <a href="#planes" onclick="closeMobileMenu()">Planes</a>
+  <a href="#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="https://wa.me/51999999999" target="_blank" rel="noopener" style="color:#2BB890;font-weight:600;">💬 WhatsApp</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="container">
+    <div class="hero__grid">
+      <div>
+        <div class="hero__eyebrow">
+          <span class="hero__pulse"></span>
+          <span>Gestión residencial del futuro · Hoy en Perú</span>
+        </div>
+        <h1>Tu condominio,<br/><em>sin complicaciones</em></h1>
+        <p class="hero__subtitle">
+          Administramos tu edificio 100% vía WhatsApp. Sin apps que descargar, sin contraseñas que recordar. Tecnología premium, accesible para todas las generaciones.
+        </p>
+        <div class="hero__actions">
+          <a href="https://wa.me/51999999999?text=Hola%20Trevia%2C%20quiero%20información" target="_blank" rel="noopener" class="btn btn-primary" style="font-size:.95rem;padding:16px 30px;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Hablar con Trevia
+          </a>
+          <a href="#como" class="btn btn-outline">Ver cómo funciona</a>
+        </div>
+        <div class="hero__stats">
+          <div class="hero__stat">
+            <div class="hero__stat-num">100<span>%</span></div>
+            <div class="hero__stat-label">Digital vía WhatsApp</div>
+          </div>
+          <div class="hero__stat">
+            <div class="hero__stat-num">24<span>/7</span></div>
+            <div class="hero__stat-label">Atención continua</div>
+          </div>
+          <div class="hero__stat">
+            <div class="hero__stat-num">0</div>
+            <div class="hero__stat-label">Apps que instalar</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <div class="hero__phone-wrap">
+          <div class="hero__float hero__float--1">
+            <span class="hero__float-icon">✅</span>
+            <div>
+              <div class="hero__float-title">Pago registrado</div>
+              <div class="hero__float-sub">Mantenimiento · S/ 280</div>
+            </div>
+          </div>
+          <div class="hero__phone-mock">
+            <div class="hero__phone-header">
+              <div class="hero__phone-avatar">🏢</div>
+              <div>
+                <div class="hero__phone-name">Trevia · Edificio Las Palmas</div>
+                <div class="hero__phone-status">● En línea</div>
+              </div>
+            </div>
+            <div class="hero__msg">
+              <div class="hero__bubble hero__bubble--in">Hola 👋 ¿Cuándo es la próxima fecha de pago?</div>
+            </div>
+            <div class="hero__msg hero__msg--out">
+              <div>
+                <div class="hero__bubble hero__bubble--out">¡Hola María! Tu próximo pago es el <strong>5 de marzo</strong> por S/ 280. Te enviaré un recordatorio 3 días antes 📅</div>
+                <span class="msg-time">✓✓ Leído</span>
+              </div>
+            </div>
+            <div class="hero__msg">
+              <div class="hero__bubble hero__bubble--in">¿Hay algo pendiente en el edificio?</div>
+            </div>
+            <div class="hero__msg hero__msg--out">
+              <div class="hero__bubble hero__bubble--out">Sí: 🔧 Revisión de ascensor programada para el viernes.</div>
+            </div>
+            <div class="hero__msg">
+              <div class="hero__typing"><span></span><span></span><span></span></div>
+            </div>
+          </div>
+          <div class="hero__float hero__float--2">
+            <span class="hero__float-icon">📊</span>
+            <div>
+              <div class="hero__float-title">Reporte listo</div>
+              <div class="hero__float-sub">Febrero 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUÉ ES -->
+<section class="section" id="quees">
+  <div class="container">
+    <div class="quees__grid">
+      <div class="reveal">
+        <span class="eyebrow">Nuestra esencia</span>
+        <h2>La administración de tu edificio, reinventada</h2>
+        <div class="divider"></div>
+        <p class="lead"><strong>Trevia</strong> nace de tres pilares: finanzas, legal y gestión. <em>Tri</em> (equilibrio) + <em>via</em> (el camino). Como el <em>trivium</em> clásico: estructura, método y orden para tu comunidad.</p>
+        <div class="quees__pillar-list">
+          <div class="quees__pillar reveal reveal-delay-1">
+            <div class="quees__pillar-num">01</div>
+            <div class="quees__pillar-body"><h4>Finanzas transparentes</h4><p>Reportes mensuales claros, seguimiento de cobros, control total del fondo de mantenimiento.</p></div>
+          </div>
+          <div class="quees__pillar reveal reveal-delay-2">
+            <div class="quees__pillar-num">02</div>
+            <div class="quees__pillar-body"><h4>Gestión sin fricciones</h4><p>Todo vía WhatsApp. Incidencias, comunicados, reservas, proveedores — sin pasos adicionales.</p></div>
+          </div>
+          <div class="quees__pillar reveal reveal-delay-3">
+            <div class="quees__pillar-num">03</div>
+            <div class="quees__pillar-body"><h4>Inclusión digital real</h4><p>Diseñado para todas las generaciones. Si sabes usar WhatsApp, sabes usar Trevia.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <div class="quees__visual">
+          <div class="quees__logo-big">Tre<span>via</span></div>
+          <p class="quees__tagline">Gestión Residencial Digital</p>
+          <div class="quees__pills">
+            <span class="quees__pill">🏛️ Finanzas</span>
+            <span class="quees__pill">⚖️ Legal</span>
+            <span class="quees__pill">⚙️ Gestión</span>
+            <span class="quees__pill">📱 WhatsApp</span>
+            <span class="quees__pill">🤖 IA Domus</span>
+            <span class="quees__pill">👥 Inclusivo</span>
+          </div>
+          <div style="margin-top:28px;padding:18px;background:rgba(255,255,255,.06);border-radius:12px;border:1px solid rgba(255,255,255,.1);">
+            <p style="font-size:.72rem;opacity:.55;margin-bottom:5px;text-transform:uppercase;letter-spacing:.08em;">Tecnología de</p>
+            <p style="font-size:1.1rem;font-weight:700;color:var(--green);">Domus · IA para condominios</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="section section--off" id="como">
+  <div class="container">
+    <div class="steps__header reveal">
+      <span class="eyebrow">Proceso simple</span>
+      <h2>Así de fácil funciona Trevia</h2>
+      <p class="lead" style="margin:14px auto 0;text-align:center;">Cuatro pasos. Todo vía WhatsApp. Cero complicaciones.</p>
+    </div>
+    <div class="steps__track" style="margin-top:60px;">
+      <div class="step reveal reveal-delay-1"><div class="step__number">📞</div><h4>1. Nos contactas</h4><p>Escríbenos por WhatsApp. Agendamos una reunión con tu junta directiva sin costo.</p></div>
+      <div class="step reveal reveal-delay-2"><div class="step__number">📋</div><h4>2. Diagnóstico</h4><p>Auditamos el estado actual: finanzas, contratos, proveedores y pendientes.</p></div>
+      <div class="step reveal reveal-delay-3"><div class="step__number">🚀</div><h4>3. Activamos Trevia</h4><p>Configuramos Domus+IA y registramos a todos los residentes en WhatsApp. Sin apps.</p></div>
+      <div class="step reveal reveal-delay-4"><div class="step__number">✅</div><h4>4. Gestión 24/7</h4><p>Tu edificio ya está en manos de Trevia. Reportes, atención y notificaciones automáticas.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section class="section" id="servicios">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:60px;" class="reveal">
+      <span class="eyebrow">Lo que hacemos</span>
+      <h2>Servicios integrales de gestión</h2>
+    </div>
+    <div class="grid-3">
+      <div class="service-card reveal reveal-delay-1"><div class="icon-circle">💰</div><h3>Control Financiero</h3><p>Gestión completa del presupuesto, cobros y pagos con transparencia total.</p><ul><li>Cobro de cuotas de mantenimiento</li><li>Seguimiento de morosidad</li><li>Reportes mensuales detallados</li><li>Fondo de reserva</li><li>Conciliación bancaria</li></ul></div>
+      <div class="service-card reveal reveal-delay-2"><div class="icon-circle icon-circle--blue">⚙️</div><h3>Gestión Operativa</h3><p>Coordinación de mantenimiento, proveedores, personal y áreas comunes.</p><ul><li>Mantenimiento preventivo y correctivo</li><li>Gestión de proveedores</li><li>Supervisión de personal</li><li>Control de áreas comunes</li><li>Reserva de instalaciones</li></ul></div>
+      <div class="service-card reveal reveal-delay-3"><div class="icon-circle icon-circle--gold">📋</div><h3>Gestión Legal</h3><p>Asesoría y cumplimiento normativo según la legislación peruana vigente.</p><ul><li>Convocatorias y asambleas</li><li>Reglamento interno</li><li>Actas y documentación legal</li><li>Cumplimiento SUNARP</li><li>Gestión de contratos</li></ul></div>
+      <div class="service-card reveal reveal-delay-1"><div class="icon-circle">📱</div><h3>Atención Digital 24/7</h3><p>Canal único de comunicación por WhatsApp con respuesta inmediata.</p><ul><li>Chatbot inteligente Domus</li><li>Notificaciones automáticas</li><li>Comunicados masivos</li><li>Gestión de incidencias</li><li>Atención personalizada</li></ul></div>
+      <div class="service-card reveal reveal-delay-2"><div class="icon-circle">📊</div><h3>Reportería Transparente</h3><p>Información financiera y operativa accesible en tiempo real.</p><ul><li>Estado de cuenta por unidad</li><li>Presupuesto vs ejecutado</li><li>Dashboard mensual</li><li>Histórico de pagos</li><li>Alertas de vencimiento</li></ul></div>
+      <div class="service-card reveal reveal-delay-3"><div class="icon-circle icon-circle--gold">🤝</div><h3>Gestor Dedicado</h3><p>Un administrador asignado a tu edificio con acompañamiento continuo.</p><ul><li>Administrador responsable</li><li>Reuniones mensuales</li><li>Respaldo presencial</li><li>Planificación anual</li><li>Soporte a la junta</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- DOMUS / IA -->
+<section class="section section--dark" id="domus">
+  <div class="container">
+    <div class="domus__inner">
+      <div class="reveal">
+        <div class="domus__badge-row"><span class="badge">Powered by Domus</span><span class="badge badge--gold">Inteligencia Artificial</span></div>
+        <span class="eyebrow" style="color:var(--green);">Tecnología de vanguardia</span>
+        <h2 style="color:var(--white);margin-top:10px;margin-bottom:18px;">El cerebro detrás de Trevia</h2>
+        <p class="lead lead--light"><strong style="color:var(--white);">Domus</strong> es la plataforma de IA especializada en condominios que potencia cada proceso de Trevia. Automatización inteligente, respuestas en segundos.</p>
+        <div class="domus__features">
+          <div class="domus__feat reveal reveal-delay-1"><div class="domus__feat-icon">🤖</div><div><h4 style="color:var(--white);">Chatbot Conversacional</h4><p>IA entrenada en gestión de condominios. Resuelve el 80% de consultas sin intervención humana.</p></div></div>
+          <div class="domus__feat reveal reveal-delay-2"><div class="domus__feat-icon">📈</div><div><h4 style="color:var(--white);">Seguimiento Inteligente de Morosidad</h4><p>Recordatorios automáticos escalonados y análisis predictivo de pagos.</p></div></div>
+          <div class="domus__feat reveal reveal-delay-3"><div class="domus__feat-icon">🔔</div><div><h4 style="color:var(--white);">Notificaciones Proactivas</h4><p>El sistema anticipa necesidades: vencimientos, mantenimientos, recordatorios de asambleas.</p></div></div>
+          <div class="domus__feat reveal reveal-delay-4"><div class="domus__feat-icon">🔒</div><div><h4 style="color:var(--white);">Seguridad y Privacidad</h4><p>Cumplimiento con Ley N° 29733 de Protección de Datos Personales del Perú.</p></div></div>
+        </div>
+      </div>
+      <div class="domus__visual reveal reveal-delay-2">
+        <p style="color:rgba(255,255,255,.45);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:18px;">Dashboard en tiempo real</p>
+        <div class="domus__metric"><div class="domus__metric-val">94<span>%</span></div><div class="domus__metric-header"><span>Tasa de cobro mensual</span><span style="color:var(--green);">↑ +8%</span></div><div class="domus__bar"><div class="domus__bar-fill" style="width:94%"></div></div></div>
+        <div class="domus__metric"><div class="domus__metric-val">&lt;2<span>min</span></div><div class="domus__metric-header"><span>Tiempo de respuesta</span><span style="color:var(--green);">↓ Óptimo</span></div><div class="domus__bar"><div class="domus__bar-fill" style="width:98%"></div></div></div>
+        <div class="domus__metric"><div class="domus__metric-val">100<span>%</span></div><div class="domus__metric-header"><span>Procesos digitalizados</span><span style="color:var(--green);">✓ Meta cumplida</span></div><div class="domus__bar"><div class="domus__bar-fill" style="width:100%"></div></div></div>
+        <div class="domus__metric"><div class="domus__metric-val">24<span>/7</span></div><div class="domus__metric-header"><span>Disponibilidad del sistema</span><span style="color:var(--green);">● Activo</span></div><div class="domus__bar"><div class="domus__bar-fill" style="width:100%"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+<section class="section section--off" id="beneficios">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:60px;" class="reveal"><span class="eyebrow">¿Por qué Trevia?</span><h2>Todo lo que gana tu edificio</h2></div>
+    <div class="benefits__grid">
+      <div class="benefit-item reveal reveal-delay-1"><div class="benefit-icon" style="background:rgba(43,184,144,.12);">📱</div><div><h4>Solo WhatsApp</h4><p>Sin apps, sin webs, sin usuarios. Si tienes WhatsApp, tienes Trevia.</p></div></div>
+      <div class="benefit-item reveal reveal-delay-2"><div class="benefit-icon" style="background:rgba(232,168,51,.12);">💎</div><div><h4>Transparencia total</h4><p>Cada sol documentado. Reportes mensuales accesibles para todos los propietarios.</p></div></div>
+      <div class="benefit-item reveal reveal-delay-3"><div class="benefit-icon" style="background:rgba(37,99,168,.12);">👥</div><div><h4>Inclusión digital real</h4><p>Accesible para todas las generaciones. Interfaz familiar, lenguaje claro.</p></div></div>
+      <div class="benefit-item reveal reveal-delay-1"><div class="benefit-icon" style="background:rgba(43,184,144,.12);">⬇️</div><div><h4>Reducción de morosidad</h4><p>Seguimiento automatizado que reduce impagos hasta en 35% en los primeros 3 meses.</p></div></div>
+      <div class="benefit-item reveal reveal-delay-2"><div class="benefit-icon" style="background:rgba(232,168,51,.12);">⏱️</div><div><h4>Respuesta inmediata</h4><p>La IA de Domus responde 24/7. Sin esperar horarios de oficina.</p></div></div>
+      <div class="benefit-item reveal reveal-delay-3"><div class="benefit-icon" style="background:rgba(37,99,168,.12);">🏆</div><div><h4>Gestión profesional</h4><p>Administrador dedicado, procesos estandarizados y respaldo legal.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- VALORES -->
+<section class="section section--dark" id="valores">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:60px;" class="reveal"><span class="eyebrow" style="color:var(--green);">Nuestra filosofía</span><h2 style="color:var(--white);">Los valores que nos definen</h2></div>
+    <div class="grid-4">
+      <div class="valor-card reveal reveal-delay-1"><span class="valor-card__icon">🔍</span><h4>Transparencia</h4><p>Información clara, cuentas abiertas, comunicación honesta siempre.</p></div>
+      <div class="valor-card reveal reveal-delay-2"><span class="valor-card__icon">🚀</span><h4>Innovación</h4><p>Tecnología de vanguardia al servicio de la gestión residencial.</p></div>
+      <div class="valor-card reveal reveal-delay-3"><span class="valor-card__icon">⚡</span><h4>Eficiencia</h4><p>Procesos ágiles, respuestas inmediatas y resultados medibles.</p></div>
+      <div class="valor-card reveal reveal-delay-4"><span class="valor-card__icon">🤝</span><h4>Confianza</h4><p>Relaciones duraderas basadas en el cumplimiento y la ética profesional.</p></div>
+      <div class="valor-card reveal reveal-delay-1"><span class="valor-card__icon">💎</span><h4>Excelencia</h4><p>Estándar premium en cada proceso, comunicación y resultado.</p></div>
+      <div class="valor-card reveal reveal-delay-2"><span class="valor-card__icon">💚</span><h4>Cercanía Digital</h4><p>Tecnología con calidez humana. Siempre cerca aunque sea digital.</p></div>
+      <div class="valor-card reveal reveal-delay-3"><span class="valor-card__icon">🌍</span><h4>Inclusión</h4><p>Accesible para todos. Sin exclusiones ni barreras digitales.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANES -->
+<section class="section" id="planes">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:60px;" class="reveal"><span class="eyebrow">Inversión transparente</span><h2>Planes para cada edificio</h2><p class="lead" style="margin:14px auto 0;text-align:center;">Sin costos ocultos. Sin sorpresas.</p></div>
+    <div class="plans-grid">
+      <div class="plan reveal reveal-delay-1">
+        <div class="plan__name">Esencial</div><div class="plan__price">Consult.</div><div class="plan__period">Precio según edificio · Pago mensual</div>
+        <div class="plan__desc">Ideal para edificios pequeños que dan sus primeros pasos en la gestión digital.</div>
+        <ul class="plan__features"><li><span>✓</span>Hasta 20 unidades</li><li><span>✓</span>Cobro de mantenimiento</li><li><span>✓</span>WhatsApp residentes</li><li><span>✓</span>Reporte mensual básico</li><li><span>✓</span>1 reunión mensual</li><li><span>✓</span>Soporte por WhatsApp</li></ul>
+        <a href="https://wa.me/51999999999?text=Plan%20Esencial" target="_blank" rel="noopener" class="btn btn-navy" style="width:100%;justify-content:center;">Solicitar cotización</a>
+      </div>
+      <div class="plan plan--featured reveal reveal-delay-2">
+        <div class="plan__badge"><span class="badge">Más popular</span></div>
+        <div class="plan__name">Premium</div><div class="plan__price">Consult.</div><div class="plan__period">Precio según edificio · Pago mensual</div>
+        <div class="plan__desc">Para edificios medianos con gestión completa y tecnología IA Domus incluida.</div>
+        <ul class="plan__features"><li><span>✓</span>Hasta 60 unidades</li><li><span>✓</span>Todo del plan Esencial</li><li><span>✓</span>IA Domus activa 24/7</li><li><span>✓</span>Seguimiento de morosidad IA</li><li><span>✓</span>Gestión de proveedores</li><li><span>✓</span>Dashboard en tiempo real</li><li><span>✓</span>Reportes financieros avanzados</li><li><span>✓</span>Gestor dedicado asignado</li></ul>
+        <a href="https://wa.me/51999999999?text=Plan%20Premium" target="_blank" rel="noopener" class="btn btn-primary" style="width:100%;justify-content:center;">Solicitar cotización</a>
+      </div>
+      <div class="plan reveal reveal-delay-3">
+        <div class="plan__name">Corporativo</div><div class="plan__price">A medida</div><div class="plan__period">Proyectos grandes · Precio especial</div>
+        <div class="plan__desc">Para condominios grandes, inmobiliarias y proyectos con múltiples torres.</div>
+        <ul class="plan__features"><li><span>✓</span>Más de 60 unidades</li><li><span>✓</span>Todo del plan Premium</li><li><span>✓</span>Múltiples torres</li><li><span>✓</span>Reportes a directorio</li><li><span>✓</span>SLA garantizado</li><li><span>✓</span>Equipo dedicado</li></ul>
+        <a href="https://wa.me/51999999999?text=Proyecto%20corporativo" target="_blank" rel="noopener" class="btn btn-navy" style="width:100%;justify-content:center;">Hablar con ventas</a>
+        <p class="plan__note">Incluye reunión de evaluación sin costo.</p>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:28px;color:var(--gray);font-size:.82rem;">¿No sabes cuál elegir? <a href="https://wa.me/51999999999" target="_blank" rel="noopener" style="color:var(--green);font-weight:600;">Escríbenos y te asesoramos gratis →</a></p>
+  </div>
+</section>
+
+<!-- CASOS -->
+<section class="section section--off" id="casos">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:60px;" class="reveal"><span class="eyebrow">Casos reales</span><h2>Trevia en acción</h2></div>
+    <div class="grid-3">
+      <div class="caso reveal reveal-delay-1">
+        <div class="caso__header"><div class="caso__avatar">👴</div><div><div class="caso__user-name">Don Roberto, 74 años</div><div class="caso__user-role">Propietario · Piso 8</div></div></div>
+        <div class="caso__body"><div class="caso__chat"><div class="caso__bubble caso__bubble--user">¿Cuánto debo de mantenimiento?</div><div class="caso__bubble caso__bubble--bot">🏢 Don Roberto, su deuda es S/ 0.00. Está al día ✅. Próximo pago: 5 de marzo por S/ 280.</div><div class="caso__bubble caso__bubble--user">¿Cómo pago?</div><div class="caso__bubble caso__bubble--bot">Deposite a BCP 123-456789. Le enviamos el comprobante al registrar el pago 📩</div></div><div class="caso__result"><div class="caso__result-label">✓ Resultado</div><p>Sin apps, sin contraseñas. Don Roberto resolvió su consulta en 30 segundos.</p></div></div>
+      </div>
+      <div class="caso reveal reveal-delay-2">
+        <div class="caso__header"><div class="caso__avatar">👩‍💼</div><div><div class="caso__user-name">Patricia M.</div><div class="caso__user-role">Presidenta de Junta</div></div></div>
+        <div class="caso__body"><div class="caso__chat"><div class="caso__bubble caso__bubble--user">¿Quiénes están morosos este mes?</div><div class="caso__bubble caso__bubble--bot">📊 3 unidades pendientes. Deuda total: S/ 840. ¿Enviamos recordatorios automáticos?</div><div class="caso__bubble caso__bubble--user">Sí, escríbeles a los tres</div><div class="caso__bubble caso__bubble--bot">✅ Recordatorios enviados a Dpto 304, 507 y 812. Seguimiento en 48h.</div></div><div class="caso__result"><div class="caso__result-label">✓ Resultado</div><p>La junta gestiona la morosidad en segundos, sin llamadas incómodas.</p></div></div>
+      </div>
+      <div class="caso reveal reveal-delay-3">
+        <div class="caso__header"><div class="caso__avatar">🔧</div><div><div class="caso__user-name">Carlos V.</div><div class="caso__user-role">Residente · Dpto 203</div></div></div>
+        <div class="caso__body"><div class="caso__chat"><div class="caso__bubble caso__bubble--user">El ascensor hace un ruido raro</div><div class="caso__bubble caso__bubble--bot">🔔 Incidencia #089 registrada. Notificando al técnico. Tiempo estimado: 2 horas.</div><div class="caso__bubble caso__bubble--user">Perfecto, gracias</div><div class="caso__bubble caso__bubble--bot">✅ Técnico en camino. Llegada estimada: 3:30 PM.</div></div><div class="caso__result"><div class="caso__result-label">✓ Resultado</div><p>Incidencia registrada y técnico asignado automáticamente por WhatsApp.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:60px;" class="reveal"><span class="eyebrow">Dudas frecuentes</span><h2>Preguntas frecuentes</h2></div>
+    <div class="faq__grid">
+      <div class="faq-item reveal reveal-delay-1"><div class="faq__q" tabindex="0" role="button" aria-expanded="false">¿Necesito instalar alguna aplicación?<span class="faq__toggle">+</span></div><div class="faq__a">No. Trevia funciona 100% por WhatsApp. Sin descargas, sin contraseñas, sin cuentas nuevas.</div></div>
+      <div class="faq-item reveal reveal-delay-2"><div class="faq__q" tabindex="0" role="button" aria-expanded="false">¿Cómo se protegen mis datos personales?<span class="faq__toggle">+</span></div><div class="faq__a">Cumplimos con la Ley N° 29733 de Protección de Datos Personales del Perú. Datos cifrados y nunca compartidos sin autorización.</div></div>
+      <div class="faq-item reveal reveal-delay-1"><div class="faq__q" tabindex="0" role="button" aria-expanded="false">¿Personas mayores pueden usarlo fácilmente?<span class="faq__toggle">+</span></div><div class="faq__a">¡Absolutamente! Trevia fue diseñado pensando en la inclusión digital. Si alguien sabe usar WhatsApp, puede usar Trevia sin ningún problema adicional.</div></div>
+      <div class="faq-item reveal reveal-delay-2"><div class="faq__q" tabindex="0" role="button" aria-expanded="false">¿Cuánto tarda la implementación?<span class="faq__toggle">+</span></div><div class="faq__a">Entre 2 y 3 semanas: diagnóstico (1 semana), configuración (1 semana) y capacitación + lanzamiento (1 semana).</div></div>
+      <div class="faq-item reveal reveal-delay-1"><div class="faq__q" tabindex="0" role="button" aria-expanded="false">¿Qué pasa si quiero cambiar de administradora?<span class="faq__toggle">+</span></div><div class="faq__a">Hacemos un traspaso ordenado con toda la documentación e histórico financiero. Transparencia total, incluso al salir.</div></div>
+      <div class="faq-item reveal reveal-delay-2"><div class="faq__q" tabindex="0" role="button" aria-expanded="false">¿Qué diferencia a Trevia de una administradora tradicional?<span class="faq__toggle">+</span></div><div class="faq__a">La tecnología, transparencia y accesibilidad. Donde una administradora tradicional entrega un sobre con facturas, Trevia entrega reportes digitales en tiempo real y atención 24/7.</div></div>
+      <div class="faq-item reveal reveal-delay-1"><div class="faq__q" tabindex="0" role="button" aria-expanded="false">¿Qué es Domus y cómo se relaciona con Trevia?<span class="faq__toggle">+</span></div><div class="faq__a">Domus es la empresa tecnológica que provee la plataforma de IA. Trevia gestiona y atiende; Domus provee la tecnología de fondo.</div></div>
+      <div class="faq-item reveal reveal-delay-2"><div class="faq__q" tabindex="0" role="button" aria-expanded="false">¿Tienen experiencia con edificios en Perú?<span class="faq__toggle">+</span></div><div class="faq__a">Sí. Operamos en Lima y conocemos el marco legal peruano de propiedad horizontal y las particularidades de la gestión de condominios locales.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="contacto" id="contacto">
+  <div class="container">
+    <div class="contacto__inner">
+      <span class="eyebrow" style="display:block;text-align:center;margin-bottom:14px;">¿Listo para empezar?</span>
+      <h2>Tu edificio merece<br/>una gestión premium</h2>
+      <p>Agenda una reunión gratuita con nuestro equipo. Sin compromiso, sin costo. Descubre todo lo que Trevia puede hacer por tu comunidad.</p>
+      <div class="contacto__actions">
+        <a href="https://wa.me/51999999999?text=Hola%20Trevia%2C%20quiero%20agendar%20una%20reunión%20gratuita" target="_blank" rel="noopener" class="btn btn-primary" style="font-size:.95rem;padding:16px 32px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Agendar reunión gratis
+        </a>
+        <a href="https://wa.me/51999999999?text=Hola%2C%20tengo%20una%20consulta" target="_blank" rel="noopener" class="btn btn-outline" style="font-size:.95rem;padding:16px 32px;">Hacer una consulta</a>
+      </div>
+      <div class="contacto__info">
+        <div class="contacto__info-item"><div class="icon">📍</div><div class="label">Ubicación</div><div class="val">Lima, Perú</div></div>
+        <div class="contacto__info-item"><div class="icon">📱</div><div class="label">WhatsApp</div><div class="val">+51 999 999 999</div></div>
+        <div class="contacto__info-item"><div class="icon">✉️</div><div class="label">Email</div><div class="val">hola@trevia.pe</div></div>
+        <div class="contacto__info-item"><div class="icon">🕐</div><div class="label">Atención IA</div><div class="val">24 horas / 7 días</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand-name">Tre<span>via</span></div>
+        <p class="footer__brand-desc">Transformamos la administración de condominios en una experiencia digital, transparente, eficiente e inclusiva — gestionando todo vía WhatsApp.</p>
+        <div class="footer__social">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Instagram">ig</a>
+          <a href="#" aria-label="LinkedIn">in</a>
+          <a href="https://wa.me/51999999999" target="_blank" rel="noopener" aria-label="WhatsApp">wa</a>
+        </div>
+        <div class="footer__domus">Tecnología impulsada por <span>Domus · IA</span></div>
+      </div>
+      <div>
+        <div class="footer__col-title">Servicios</div>
+        <ul class="footer__links"><li><a href="#servicios">Control Financiero</a></li><li><a href="#servicios">Gestión Operativa</a></li><li><a href="#servicios">Asesoría Legal</a></li><li><a href="#servicios">Atención 24/7</a></li><li><a href="#servicios">Reportería</a></li></ul>
+      </div>
+      <div>
+        <div class="footer__col-title">Empresa</div>
+        <ul class="footer__links"><li><a href="#quees">Quiénes somos</a></li><li><a href="#valores">Valores</a></li><li><a href="#domus">Tecnología Domus</a></li><li><a href="#planes">Planes</a></li><li><a href="#contacto">Contacto</a></li></ul>
+      </div>
+      <div>
+        <div class="footer__col-title">Legal</div>
+        <ul class="footer__links"><li><a href="#">Política de Privacidad</a></li><li><a href="#">Términos de Servicio</a></li><li><a href="#">Ley N° 29733</a></li><li><a href="#">Libro de Reclamaciones</a></li></ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 Trevia · Gestión Residencial Digital. Todos los derechos reservados.</p>
+      <div class="footer__bottom-links"><a href="#">Privacidad</a><a href="#">Términos</a><a href="#">Cookies</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- WA FLOTANTE -->
+<div class="wa-float">
+  <div class="wa-float__tooltip">💬 ¿Hablamos por WhatsApp?</div>
+  <a href="https://wa.me/51999999999?text=Hola%20Trevia" target="_blank" rel="noopener" aria-label="Abrir WhatsApp">
+    <button class="wa-float__btn">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </button>
+  </a>
+</div>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 40); }, { passive: true });
+
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', String(isOpen));
+  });
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  document.querySelectorAll('.faq__q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.closest('.faq-item');
+      const isOpen = item.classList.toggle('open');
+      q.setAttribute('aria-expanded', String(isOpen));
+    });
+    q.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); q.click(); }
+    });
+  });
+</script>
+</body>
+</html>
